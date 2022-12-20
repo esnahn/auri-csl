@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
   <info>
     <title>Architecture &amp; Urban Research Institute for Korean References</title>
@@ -14,7 +14,7 @@
     <category citation-format="author-date"/>
     <category field="psychology"/>
     <category field="generic-base"/>
-    <updated>2022-12-19T00:00:00+09:00</updated>
+    <updated>2022-12-20T00:00:00+09:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <locale xml:lang="en">
@@ -47,7 +47,20 @@
     <terms>
       <term name="letter">개인 서신</term>
       <term name="letter" form="short">편지</term>
+
+      <!-- fixing ko-KR locales -->
+      <term name="no date" form="short">연도미상</term>
+
+      <term name="article-newspaper">신문 기사</term>
+      <term name="article-newspaper" form="short">기사</term>
+
+      <term name="retrieved">검색일</term>
     </terms>
+    <date form="numeric">
+      <date-part name="year" suffix="."/>
+      <date-part name="month" form="numeric" suffix="."/>
+      <date-part name="day" form="numeric" suffix="."/>
+    </date>
   </locale>
   <!-- General categories of item types:
        Periodical: article-journal article-magazine article-newspaper post-weblog review review-book
@@ -185,17 +198,17 @@
               <date-part name="year"/>
             </date>
             <text variable="year-suffix"/>
-            <choose>
+            <!-- No full date on date (year) part. -->
+            <!-- <choose>
               <if type="article-magazine article-newspaper broadcast interview motion_picture pamphlet personal_communication post post-weblog song speech webpage" match="any">
-                <!-- Many video and audio examples in manual give full dates. Err on the side of too much information. -->
                 <date variable="issued">
                   <date-part prefix=", " name="month"/>
                   <date-part prefix=" " name="day"/>
                 </date>
               </if>
-              <else-if type="paper-conference">
-                <!-- Capture 'speech' stored as 'paper-conference' -->
-                <choose>
+              <else-if type="paper-conference"> -->
+            <!-- Capture 'speech' stored as 'paper-conference' -->
+            <!-- <choose>
                   <if variable="collection-editor editor editorial-director issue page volume" match="none">
                     <date variable="issued">
                       <date-part prefix=", " name="month"/>
@@ -203,10 +216,10 @@
                     </date>
                   </if>
                 </choose>
-              </else-if>
-              <!-- Only year: article article-journal book chapter entry entry-dictionary entry-encyclopedia dataset figure graphic 
+              </else-if> -->
+            <!-- Only year: article article-journal book chapter entry entry-dictionary entry-encyclopedia dataset figure graphic 
                    manuscript map musical_score paper-conference[published] patent report review review-book thesis -->
-            </choose>
+            <!-- </choose> -->
           </if>
           <else-if variable="status">
             <group>
@@ -274,13 +287,14 @@
               </if>
             </choose>
             <group>
-              <choose>
+              <!-- No full date on date (year) part. -->
+              <!-- <choose>
                 <if type="interview personal_communication" match="any">
                   <choose>
-                    <if variable="archive container-title DOI publisher URL" match="none">
-                      <!-- These variables indicate that the communication is retrievable by the reader. 
+                    <if variable="archive container-title DOI publisher URL" match="none"> -->
+              <!-- These variables indicate that the communication is retrievable by the reader. 
                            If not, then use the in-text-only personal communication format -->
-                      <date variable="issued" form="text"/>
+              <!-- <date variable="issued" form="text"/>
                     </if>
                     <else>
                       <date variable="issued">
@@ -289,12 +303,12 @@
                     </else>
                   </choose>
                 </if>
-                <else>
-                  <date variable="issued">
-                    <date-part name="year"/>
-                  </date>
-                </else>
-              </choose>
+                <else> -->
+              <date variable="issued">
+                <date-part name="year"/>
+              </date>
+              <!-- </else>
+              </choose> -->
               <text variable="year-suffix"/>
             </group>
           </group>
@@ -313,17 +327,18 @@
   <!-- APA has two description elements following the title:
        title (parenthetical) [bracketed]  -->
   <macro name="title-and-descriptions">
+    <!-- auri: drop bracketed descriptions -->
     <choose>
       <if variable="title">
         <group delimiter=" ">
           <text macro="title"/>
           <text macro="parenthetical"/>
-          <text macro="bracketed"/>
+          <!-- <text macro="bracketed"/> -->
         </group>
       </if>
       <else>
         <group delimiter=" ">
-          <text macro="bracketed"/>
+          <!-- <text macro="bracketed"/> -->
           <text macro="parenthetical"/>
         </group>
       </else>
@@ -388,7 +403,7 @@
   <macro name="title-intext">
     <choose>
       <if variable="title" match="none">
-        <text macro="bracketed-intext" prefix="[" suffix="]"/>
+        <!-- <text macro="bracketed-intext" prefix="[" suffix="]"/> -->
       </if>
       <else-if type="bill">
         <!-- If a bill has no number or container-title, assume it is a hearing; italic -->
@@ -1225,7 +1240,7 @@
             </group>
           </group>
           <text macro="parenthetical-container"/>
-          <text macro="bracketed-container"/>
+          <!-- <text macro="bracketed-container"/> -->
         </group>
       </if>
     </choose>
@@ -1285,16 +1300,15 @@
       </if>
       <else-if variable="URL">
         <group delimiter=" ">
-          <choose>
-            <if variable="issued status" match="none">
-              <group delimiter=" ">
-                <text term="retrieved" text-case="capitalize-first"/>
-                <date variable="accessed" form="text" suffix=","/>
-                <text term="from"/>
-              </group>
-            </if>
-          </choose>
+          <!-- always show retrieval date AFTER the URL
+          slightly modifying auri format here: 
+            NO period following the URL. (Yeah, I know.)
+            a space between the URL and the date. -->
           <text variable="URL"/>
+          <group delimiter=" " prefix="(" suffix=")">
+            <text term="retrieved" text-case="capitalize-first" suffix=":"/>
+            <date variable="accessed" form="numeric"/>
+          </group>
         </group>
       </else-if>
     </choose>
@@ -1584,12 +1598,41 @@
       <choose>
         <if locator="chapter">
           <label variable="locator" text-case="capitalize-first"/>
+          <!-- https://docs.citationstyles.org/en/stable/specification.html#locators -->
         </if>
         <else>
           <label variable="locator" form="short"/>
         </else>
       </choose>
       <text variable="locator"/>
+    </group>
+  </macro>
+  <!-- auri macros -->
+  <macro name="date-genre">
+    <group delimiter=" ">
+      <choose>
+        <if type="article-magazine article-newspaper broadcast interview motion_picture pamphlet personal_communication post post-weblog song speech webpage" match="any">
+          <date variable="issued">
+            <date-part name="month" form="numeric" suffix="월"/>
+            <date-part name="day" prefix=" " suffix="일"/>
+          </date>
+        </if>
+      </choose>
+      <!-- everybody gets a genre (for now)
+      TODO: only newspaper articles and documents get genre? -->
+      <choose>
+        <if variable="genre">
+          <text variable="genre" text-case="capitalize-first"/>
+        </if>
+        <else-if variable="medium">
+          <text variable="medium" text-case="capitalize-first"/>
+        </else-if>
+        <!-- in case of an article without a genre -->
+        <else-if type="article-magazine article-newspaper broadcast interview" match="any">
+          <text term="article-newspaper" form="short" text-case="capitalize-first"/>
+        </else-if>
+      </choose>
+
     </group>
   </macro>
   <citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name-with-initials">
@@ -1633,10 +1676,12 @@
             <group delimiter=". " suffix=".">
               <text macro="author-bib"/>
               <text macro="date-bib"/>
+              <!-- TODO: for newspaper articles (and press releases), move bracketed descriptions(genre) to after the publication(media). -->
               <text macro="title-and-descriptions"/>
               <text macro="container"/>
               <text macro="event"/>
               <text macro="publisher"/>
+              <text macro="date-genre"/>
             </group>
             <text macro="access"/>
             <text macro="publication-history"/>
