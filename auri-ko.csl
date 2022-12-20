@@ -1611,7 +1611,7 @@
   <macro name="date-genre">
     <group delimiter=" ">
       <choose>
-        <if type="article-magazine article-newspaper broadcast interview motion_picture pamphlet personal_communication post post-weblog song speech webpage" match="any">
+        <if type="article-magazine article-newspaper broadcast interview motion_picture pamphlet personal_communication post post-weblog song speech" match="any">
           <date variable="issued">
             <date-part name="month" form="numeric" suffix="월"/>
             <date-part name="day" prefix=" " suffix="일"/>
