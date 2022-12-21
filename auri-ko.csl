@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
   <info>
     <title>Architecture &amp; Urban Research Institute for Korean References</title>
@@ -1618,8 +1618,7 @@
           </date>
         </if>
       </choose>
-      <!-- everybody gets a genre (for now)
-      TODO: only newspaper articles and documents get genre? -->
+      <!-- everybody gets a genre (in references) -->
       <choose>
         <if variable="genre">
           <text variable="genre" text-case="capitalize-first"/>
@@ -1707,7 +1706,6 @@
             <group delimiter=". " suffix=".">
               <text macro="author-bib"/>
               <text macro="date-bib"/>
-              <!-- TODO: for newspaper articles (and press releases), move bracketed descriptions(genre) to after the publication(media). -->
               <text macro="title-and-descriptions"/>
               <text macro="container"/>
               <text macro="event"/>
