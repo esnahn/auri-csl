@@ -56,11 +56,20 @@
 
       <term name="retrieved">검색일</term>
 
-      <term name="edition">
-        <single>판</single>
-        <multiple>판</multiple>
-      </term>
+      <term name="edition">판</term>
       <term name="edition" form="short">판</term>
+      <term name="volume">권</term>
+      <term name="volume" form="short">권</term>
+
+      <!-- SHORT LOCATOR FORMS -->
+      <!-- <term name="volume" form="short">
+        <single>권</single>
+        <multiple>권</multiple>
+      </term>
+      <term name="issue" form="short">
+        <single>호</single>
+        <multiple>호</multiple>
+      </term> -->
 
       <!-- LONG ROLE FORMS -->
       <term name="editor">
@@ -75,6 +84,7 @@
         <single>편역자</single>
         <multiple>편역자</multiple>
       </term>
+
       <!-- SHORT ROLE FORMS -->
       <term name="editor" form="short">
         <single>편</single>
@@ -88,6 +98,18 @@
         <single>편역</single>
         <multiple>편역</multiple>
       </term>
+
+      <!-- empty some prepositions-->
+      <term name="in"></term>
+
+      <term name="contributor" form="verb"></term>
+      <term name="container-author" form="verb"></term>
+      <term name="reviewed-author" form="verb"></term>
+
+      <term name="contributor" form="verb-short"></term>
+      <term name="container-author" form="verb-short"></term>
+      <term name="reviewed-author" form="verb-short"></term>
+
     </terms>
     <date form="numeric">
       <date-part name="year" suffix="."/>
@@ -898,6 +920,7 @@
     </choose>
   </macro>
   <macro name="secondary-contributors-periodical">
+    <!-- TODO: semicolons, etc. -->
     <group delimiter="; ">
       <choose>
         <if variable="title">
@@ -929,7 +952,7 @@
           <!-- Webpages treat container-title like publisher -->
           <choose>
             <if variable="container-title" match="none">
-              <group delimiter="; ">
+              <group delimiter=". ">
                 <names variable="container-author">
                   <label form="verb-short" suffix=" " text-case="title"/>
                   <name initialize-with=". " delimiter=", "/>
@@ -943,7 +966,7 @@
           </choose>
         </if>
         <else>
-          <group delimiter="; ">
+          <group delimiter=". ">
             <names variable="container-author">
               <label form="verb-short" suffix=" " text-case="title"/>
               <name initialize-with=". " delimiter=", "/>
@@ -1066,9 +1089,11 @@
             <!-- Non-numeric volumes are already printed as part of the book title -->
             <if is-numeric="volume" match="none"/>
             <else>
-              <group delimiter=" ">
-                <label variable="volume" form="short" text-case="capitalize-first"/>
+              <group>
+                <!-- korean ordinal number hardcoded -->
+                <text value="제"/>
                 <number variable="volume" form="numeric"/>
+                <label variable="volume" form="short" text-case="capitalize-first"/>
               </group>
             </else>
           </choose>
@@ -1076,9 +1101,9 @@
         <else>
           <group>
             <!-- Replace with label variable="number-of-volumes" if that becomes available -->
-            <text term="volume" form="short" text-case="capitalize-first" suffix=" "/>
             <text term="page-range-delimiter" prefix="1"/>
             <number variable="number-of-volumes" form="numeric"/>
+            <text term="volume" form="short" text-case="capitalize-first"/>
           </group>
         </else>
       </choose>
@@ -1253,10 +1278,10 @@
         <group delimiter=" ">
           <text term="in" text-case="capitalize-first"/>
           <group delimiter=", ">
-            <names variable="editor translator" delimiter=", &amp; ">
+            <names variable="editor translator" delimiter=", ">
               <!-- Change to editortranslator and move editor to substitute as that becomes available -->
               <name initialize-with=". " delimiter=", "/>
-              <label form="short" text-case="title" prefix=" (" suffix=")"/>
+              <label form="short" text-case="title" prefix=" "/>
               <substitute>
                 <names variable="editorial-director"/>
                 <names variable="collection-editor"/>
@@ -1269,7 +1294,8 @@
               <choose>
                 <if is-numeric="volume" match="none">
                   <group delimiter=" ">
-                    <label variable="volume" form="short" text-case="capitalize-first"/>
+                    <!-- drop "Vol" prefix -->
+                    <!-- <label variable="volume" form="short" text-case="capitalize-first"/> -->
                     <text variable="volume"/>
                   </group>
                 </if>
