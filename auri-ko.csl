@@ -1635,6 +1635,36 @@
 
     </group>
   </macro>
+  <macro name="date-genre-intext">
+    <group delimiter=" ">
+      <choose>
+        <if type="article-magazine article-newspaper broadcast interview motion_picture pamphlet personal_communication post post-weblog song speech" match="any">
+          <date variable="issued">
+            <date-part name="month" form="numeric" suffix="월"/>
+            <date-part name="day" prefix=" " suffix="일"/>
+          </date>
+        </if>
+      </choose>
+      <!-- only newspaper articles and documents get genre in IN-TEXT CITE -->
+      <choose>
+        <if type="article-magazine article-newspaper broadcast interview motion_picture pamphlet personal_communication post post-weblog song speech" match="any">
+          <choose>
+            <if variable="genre">
+              <text variable="genre" text-case="capitalize-first"/>
+            </if>
+            <else-if variable="medium">
+              <text variable="medium" text-case="capitalize-first"/>
+            </else-if>
+            <!-- in case of an article without a genre -->
+            <else-if type="article-magazine article-newspaper broadcast interview" match="any">
+              <text term="article-newspaper" form="short" text-case="capitalize-first"/>
+            </else-if>
+          </choose>
+        </if>
+      </choose>
+
+    </group>
+  </macro>
   <citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name-with-initials">
     <sort>
       <key macro="author-bib" names-min="3" names-use-first="1"/>
@@ -1646,6 +1676,7 @@
       <group delimiter=", ">
         <text macro="author-intext"/>
         <text macro="date-intext"/>
+        <text macro="date-genre-intext"/>
         <text macro="citation-locator"/>
       </group>
     </layout>
