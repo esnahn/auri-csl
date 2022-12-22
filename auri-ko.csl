@@ -75,33 +75,21 @@
       <term name="thesis">학위논문</term>
 
       <!-- LONG ROLE FORMS -->
-      <term name="editor">
-        <single>편집자</single>
-        <multiple>편집자</multiple>
-      </term>
-      <term name="translator">
-        <single>번역자</single>
-        <multiple>번역자</multiple>
-      </term>
-      <term name="editortranslator">
-        <single>편역자</single>
-        <multiple>편역자</multiple>
-      </term>
+      <term name="editor">편집자</term>
+      <term name="translator">번역자</term>
+      <term name="editortranslator">편역자</term>
+
 
       <!-- SHORT ROLE FORMS -->
-      <term name="editor" form="short">
-        <single>편</single>
-        <multiple>편</multiple>
-      </term>
-      <term name="translator" form="short">
-        <single>역</single>
-        <multiple>역</multiple>
-      </term>
-      <term name="editortranslator" form="short">
-        <single>편역</single>
-        <multiple>편역</multiple>
-      </term>
+      <!-- actually, this is more like short verb forms in korean.
+      but since the order of verb-noun is reversed in korean, this fits more here. -->
+      <term name="editor" form="short">편</term>
+      <term name="translator" form="short">역</term>
+      <term name="editortranslator" form="short">편역</term>
+      <!-- TODO: 대담? -->
+      <term name="interviewer" form="short">인터뷰</term>
 
+      <!-- VERB ROLE FORMS -->
       <!-- empty some prepositions-->
       <term name="in"></term>
 
@@ -924,18 +912,18 @@
   </macro>
   <macro name="secondary-contributors-periodical">
     <!-- TODO: semicolons, etc. -->
-    <group delimiter="; ">
+    <group delimiter=". ">
       <choose>
         <if variable="title">
-          <names variable="interviewer" delimiter="; ">
+          <names variable="interviewer" delimiter=". ">
             <name initialize-with=". " delimiter=", "/>
-            <label form="short" prefix=", " text-case="title"/>
+            <label form="short" prefix=" " text-case="title"/>
           </names>
         </if>
       </choose>
-      <names variable="translator" delimiter="; ">
+      <names variable="translator" delimiter=". ">
         <name initialize-with=". " delimiter=", "/>
-        <label form="short" prefix=", " text-case="title"/>
+        <label form="short" prefix=" " text-case="title"/>
       </names>
     </group>
   </macro>
@@ -945,7 +933,7 @@
         <if variable="title">
           <names variable="interviewer">
             <name initialize-with=". " delimiter=", "/>
-            <label form="short" prefix=", " text-case="title"/>
+            <label form="short" prefix=" " text-case="title"/>
           </names>
         </if>
       </choose>
