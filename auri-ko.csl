@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
   <info>
     <title>Architecture &amp; Urban Research Institute for Korean References</title>
@@ -1766,7 +1766,7 @@
             <else-if type="article-magazine article-newspaper broadcast" match="any">
               <text term="article-newspaper" form="short" text-case="capitalize-first"/>
             </else-if>
-            <!-- drop genre for interviews without authors. -->
+            <!-- drop label for interviews without authors. -->
             <else-if type="interview">
               <choose>
                 <if variable="author contributor interviewer translator" match="any">
