@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
   <info>
     <title>Architecture &amp; Urban Research Institute for Korean References</title>
@@ -70,6 +70,9 @@
         <single>호</single>
         <multiple>호</multiple>
       </term> -->
+
+      <!-- LONG ITEM TYPE FORMS -->
+      <term name="thesis">학위논문</term>
 
       <!-- LONG ROLE FORMS -->
       <term name="editor">
@@ -1309,12 +1312,24 @@
     </choose>
   </macro>
   <macro name="publisher">
-    <group delimiter="; ">
+    <group delimiter=". ">
       <choose>
         <if type="thesis">
           <choose>
             <if variable="archive DOI URL" match="none">
-              <text variable="publisher"/>
+              <!-- auri: for theses, print genre(thesis type) with publisher(univ.) -->
+              <group delimiter=" ">
+                <text variable="publisher"/>
+                <choose>
+                  <if variable="genre">
+                    <text variable="genre"/>
+                  </if>
+                  <!-- default genre text for thesis -->
+                  <else>
+                    <text term="thesis"/>
+                  </else>
+                </choose>
+              </group>
             </if>
           </choose>
         </if>
@@ -1681,18 +1696,22 @@
           </date>
         </if>
       </choose>
-      <!-- everybody gets a genre (in references) -->
+      <!-- everybody EXCEPT thesis gets a genre (in references) -->
       <choose>
-        <if variable="genre">
-          <text variable="genre" text-case="capitalize-first"/>
+        <if type="thesis" match="none">
+          <choose>
+            <if variable="genre">
+              <text variable="genre" text-case="capitalize-first"/>
+            </if>
+            <else-if variable="medium">
+              <text variable="medium" text-case="capitalize-first"/>
+            </else-if>
+            <!-- in case of an article without a genre -->
+            <else-if type="article-magazine article-newspaper broadcast interview" match="any">
+              <text term="article-newspaper" form="short" text-case="capitalize-first"/>
+            </else-if>
+          </choose>
         </if>
-        <else-if variable="medium">
-          <text variable="medium" text-case="capitalize-first"/>
-        </else-if>
-        <!-- in case of an article without a genre -->
-        <else-if type="article-magazine article-newspaper broadcast interview" match="any">
-          <text term="article-newspaper" form="short" text-case="capitalize-first"/>
-        </else-if>
       </choose>
 
     </group>
