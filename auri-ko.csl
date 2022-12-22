@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
   <info>
     <title>Architecture &amp; Urban Research Institute for Korean References</title>
@@ -14,7 +14,7 @@
     <category citation-format="author-date"/>
     <category field="psychology"/>
     <category field="generic-base"/>
-    <updated>2022-12-21T00:00:00+09:00</updated>
+    <updated>2022-12-22T00:00:00+09:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <locale xml:lang="en">
@@ -246,14 +246,18 @@
         </if>
       </choose>
       <group>
+        <!-- supress date in interviews without authors (in here). -->
         <choose>
-          <if variable="issued">
-            <date variable="issued">
-              <date-part name="year"/>
-            </date>
-            <text variable="year-suffix"/>
-            <!-- No full date on date (year) part. -->
-            <!-- <choose>
+          <if type="interview" match="none">
+
+            <choose>
+              <if variable="issued">
+                <date variable="issued">
+                  <date-part name="year"/>
+                </date>
+                <text variable="year-suffix"/>
+                <!-- No full date on date (year) part. -->
+                <!-- <choose>
               <if type="article-magazine article-newspaper broadcast interview motion_picture pamphlet personal_communication post post-weblog song speech webpage" match="any">
                 <date variable="issued">
                   <date-part prefix=", " name="month"/>
@@ -261,8 +265,8 @@
                 </date>
               </if>
               <else-if type="paper-conference"> -->
-            <!-- Capture 'speech' stored as 'paper-conference' -->
-            <!-- <choose>
+                <!-- Capture 'speech' stored as 'paper-conference' -->
+                <!-- <choose>
                   <if variable="collection-editor editor editorial-director issue page volume" match="none">
                     <date variable="issued">
                       <date-part prefix=", " name="month"/>
@@ -271,20 +275,45 @@
                   </if>
                 </choose>
               </else-if> -->
-            <!-- Only year: article article-journal book chapter entry entry-dictionary entry-encyclopedia dataset figure graphic 
+                <!-- Only year: article article-journal book chapter entry entry-dictionary entry-encyclopedia dataset figure graphic 
                    manuscript map musical_score paper-conference[published] patent report review review-book thesis -->
-            <!-- </choose> -->
+                <!-- </choose> -->
+              </if>
+              <else-if variable="status">
+                <group>
+                  <text variable="status" text-case="lowercase"/>
+                  <text variable="year-suffix" prefix="-"/>
+                </group>
+              </else-if>
+              <else>
+                <text term="no date" form="short"/>
+                <text variable="year-suffix" prefix="-"/>
+              </else>
+            </choose>
           </if>
-          <else-if variable="status">
-            <group>
-              <text variable="status" text-case="lowercase"/>
-              <text variable="year-suffix" prefix="-"/>
-            </group>
+          <!-- must be interview -->
+          <else-if variable="author contributor interviewer translator" match="any">
+            <!-- repeat -->
+            <choose>
+              <if variable="issued">
+                <date variable="issued">
+                  <date-part name="year"/>
+                </date>
+                <text variable="year-suffix"/>
+                <!-- No full date on date (year) part. -->
+              </if>
+              <else-if variable="status">
+                <group>
+                  <text variable="status" text-case="lowercase"/>
+                  <text variable="year-suffix" prefix="-"/>
+                </group>
+              </else-if>
+              <else>
+                <text term="no date" form="short"/>
+                <text variable="year-suffix" prefix="-"/>
+              </else>
+            </choose>
           </else-if>
-          <else>
-            <text term="no date" form="short"/>
-            <text variable="year-suffix" prefix="-"/>
-          </else>
         </choose>
       </group>
     </group>
@@ -1704,12 +1733,23 @@
   <macro name="date-genre">
     <group delimiter=" ">
       <choose>
-        <if type="article-magazine article-newspaper broadcast interview motion_picture pamphlet personal_communication post post-weblog song speech" match="any">
+        <!-- drop date for interviews without authors (in here). -->
+        <if type="article-magazine article-newspaper broadcast motion_picture pamphlet personal_communication post post-weblog song speech" match="any">
           <date variable="issued">
             <date-part name="month" form="numeric" suffix="월"/>
             <date-part name="day" prefix=" " suffix="일"/>
           </date>
         </if>
+        <else-if type="interview">
+          <choose>
+            <if variable="author contributor interviewer translator" match="any">
+              <date variable="issued">
+                <date-part name="month" form="numeric" suffix="월"/>
+                <date-part name="day" prefix=" " suffix="일"/>
+              </date>
+            </if>
+          </choose>
+        </else-if>
       </choose>
       <!-- everybody EXCEPT thesis gets a genre (in references) -->
       <choose>
@@ -1721,9 +1761,22 @@
             <else-if variable="medium">
               <text variable="medium" text-case="capitalize-first"/>
             </else-if>
-            <!-- in case of an article without a genre -->
-            <else-if type="article-magazine article-newspaper broadcast interview" match="any">
+            <!-- Generic labels for specific types -->
+            <!-- in case of an item without a genre -->
+            <else-if type="article-magazine article-newspaper broadcast" match="any">
               <text term="article-newspaper" form="short" text-case="capitalize-first"/>
+            </else-if>
+            <!-- drop label for interviews without authors. -->
+            <else-if type="interview">
+              <choose>
+                <if variable="author contributor interviewer translator" match="any">
+                  <!-- treat interviews with an author as articles -->
+                  <text term="article-newspaper" form="short" text-case="capitalize-first"/>
+                </if>
+              </choose>
+            </else-if>
+            <else-if type="personal_communication">
+              <text term="letter" text-case="capitalize-first"/>
             </else-if>
           </choose>
         </if>
@@ -1780,6 +1833,50 @@
       </choose>
     </group>
   </macro>
+
+  <macro name="full-date-event-place">
+    <!-- only for interview without authors. -->
+    <choose>
+      <if type="interview">
+        <choose>
+          <if variable="author contributor interviewer translator" match="none">
+            <group delimiter=", " prefix="(" suffix=")">
+              <!-- korean short numeric date format hardcoded -->
+              <group>
+                <choose>
+                  <if variable="event-date">
+                    <date variable="event-date">
+                      <date-part name="year" suffix="."/>
+                      <date-part name="month" form="numeric" suffix="."/>
+                      <date-part name="day" suffix="."/>
+                    </date>
+                  </if>
+                  <else>
+                    <date variable="issued">
+                      <date-part name="year" suffix="."/>
+                      <date-part name="month" form="numeric" suffix="."/>
+                      <date-part name="day" suffix="."/>
+                    </date>
+                  </else>
+                </choose>
+              </group>
+              <!-- only event places without an event title will be printed. -->
+              <choose>
+                <if variable="event-place">
+                  <choose>
+                    <if variable="event event-title" match="none">
+                      <text variable="event-place"/>
+                    </if>
+                  </choose>
+                </if>
+              </choose>
+            </group>
+          </if>
+        </choose>
+      </if>
+    </choose>
+  </macro>
+
   <citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name-with-initials">
     <sort>
       <key macro="author-bib" names-min="3" names-use-first="1"/>
@@ -1829,6 +1926,8 @@
               <text macro="publisher"/>
               <text macro="date-genre"/>
             </group>
+            <!-- only for interview without authors. -->
+            <text macro="full-date-event-place"/>
             <text macro="access"/>
             <text macro="publication-history"/>
           </group>
