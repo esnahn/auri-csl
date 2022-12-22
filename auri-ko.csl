@@ -1885,12 +1885,20 @@
       <key variable="status"/>
     </sort>
     <layout prefix="(" suffix=")" delimiter="; ">
-      <group delimiter=", ">
-        <text macro="author-intext"/>
-        <text macro="date-intext"/>
-        <text macro="date-genre-intext"/>
-        <text macro="citation-locator"/>
-      </group>
+      <choose>
+        <if type="bill legal_case legislation treaty" match="any">
+          <!-- Legal items have different orders and delimiters -->
+          <text macro="title-intext"/>
+        </if>
+        <else>
+          <group delimiter=", ">
+            <text macro="author-intext"/>
+            <text macro="date-intext"/>
+            <text macro="date-genre-intext"/>
+            <text macro="citation-locator"/>
+          </group>
+        </else>
+      </choose>
     </layout>
   </citation>
   <bibliography hanging-indent="true" et-al-min="21" et-al-use-first="19" et-al-use-last="true" entry-spacing="0" line-spacing="2">
