@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
   <info>
     <title>Architecture &amp; Urban Research Institute for Korean References</title>
@@ -1387,18 +1387,33 @@
   </macro>
   <macro name="event">
     <choose>
-      <if variable="event">
+      <if variable="event event-title" match="any">
         <!-- To prevent Zotero from printing event-place due to its double-mapping of all 'place' to
              both publisher-place and event-place. Remove this 'choose' when that is changed. -->
-        <choose>
-          <if variable="collection-editor editor editorial-director issue page volume" match="none">
-            <!-- Don't print event info if published in a proceedings -->
-            <group delimiter=", ">
-              <text variable="event"/>
-              <text variable="event-place"/>
-            </group>
-          </if>
-        </choose>
+        <!-- <text value="test6"/> -->
+        <group delimiter=" ">
+          <choose>
+            <if variable="collection-editor editor editorial-director issue page volume" match="none">
+              <!-- Don't print event info if published in a proceedings -->
+              <group delimiter=", ">
+                <text variable="event-title"/>
+                <choose>
+                  <if variable="event-title" match="none">
+                    <!-- Deprecated legacy variant of event-title -->
+                    <text variable="event"/>
+                  </if>
+                </choose>
+                <text variable="event-place"/>
+              </group>
+            </if>
+          </choose>
+          <!-- korean short numeric date format hardcoded -->
+          <date variable="event-date" prefix="(" suffix=")">
+            <date-part name="year" suffix="."/>
+            <date-part name="month" form="numeric" suffix="."/>
+            <date-part name="day" suffix="."/>
+          </date>
+        </group>
       </if>
     </choose>
   </macro>
