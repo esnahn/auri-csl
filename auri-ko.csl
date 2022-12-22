@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
   <info>
     <title>Architecture &amp; Urban Research Institute for Korean References</title>
@@ -1707,7 +1707,7 @@
           </date>
         </if>
       </choose>
-      <!-- only newspaper articles and documents get genre in IN-TEXT CITE -->
+      <!-- TODO: only newspaper articles and documents get genre in IN-TEXT CITE? -->
       <choose>
         <if type="article-magazine article-newspaper broadcast interview motion_picture pamphlet personal_communication post post-weblog song speech" match="any">
           <choose>
