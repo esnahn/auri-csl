@@ -14,7 +14,7 @@
     <category citation-format="author-date"/>
     <category field="psychology"/>
     <category field="generic-base"/>
-    <updated>2022-12-22T00:00:00+09:00</updated>
+    <updated>2023-01-05T00:00:00+09:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <locale xml:lang="en">
@@ -47,6 +47,9 @@
     <terms>
       <term name="letter">개인 서신</term>
       <term name="letter" form="short">편지</term>
+
+      <!-- fixing spacing between words by hardcording -->
+      <term name="et-al"> 외</term>
 
       <!-- fixing ko-KR locales -->
       <term name="no date" form="short">연도미상</term>
